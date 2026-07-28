@@ -50,7 +50,7 @@ const router = createBrowserRouter([
       },
 
       {
-        path: "bids",
+        path: "myBids",
         element: (
           <PrivateRoute>
             <MyBids></MyBids>
