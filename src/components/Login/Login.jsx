@@ -4,7 +4,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { toast } from "react-toastify";
 
 const Login = () => {
-  const { signInWithGoogle, signInUser } = use(AuthContext);
+  const { signInWithGoogle,signOutUser, signInUser } = use(AuthContext);
   const navigate = useNavigate();
   const location = useLocation()
   const from=location.state?.pathname||"/"
@@ -16,8 +16,13 @@ const Login = () => {
     const password = e.target.password.value;
     console.log({ email, password });
 
-    signInUser(email, password).then((result) => {
-      console.log("user", result.user);
+    signInUser(email, password)
+      .then(async(result) => {
+        if (!result.user.emailVerified) {
+          toast.error("Please verify your email first.")
+          await signOutUser()
+          return
+        }
       toast.success("login successful!");
       navigate(from,{replace:true});
     }).catch(error => {

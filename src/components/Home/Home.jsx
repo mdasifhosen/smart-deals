@@ -1,9 +1,9 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useState } from 'react';
 import LatestProducts from '../LatestProducts/LatestProducts';
 
 const latestProductsPromise = fetch("http://localhost:3000/latest-products").then(res=>res.json())
 
-const Home = () => {
+const Home = () => { 
     return (
       <div>
         <header>
@@ -15,6 +15,23 @@ const Home = () => {
               SmartDeals helps you sell, resell, and shop from trusted local
               sellers — all in one place!
             </p>
+            <div className="flex justify-center my-8">
+              <div className="join w-full max-w-lg">
+                <input
+                  type="text"
+    
+                  placeholder="Search product..."
+                  placeholder="Search by product name..."
+                  className="input input-bordered join-item w-full"
+                />
+                <button
+                  
+                  className="btn btn-primary join-item"
+                >
+                  Search
+                </button>
+              </div>
+            </div>
             <div className="w-full flex justify-center items-center gap-5 mt-8">
               <button className="btn btn-active btn-primary w-[156px] mr-3">
                 Watch All Products

@@ -17,7 +17,19 @@ const LatestProducts = ({ latestProductsPromise }) =>{
           ))}
         </div>
       </div>
-    );
+      
+ 
+    // <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    //   {products.map((product) => (
+    //     <div key={product._id}>
+    //       <img src={product.image} alt={product.title} />
+    //       <h2>{product.title}</h2>
+    //     </div>
+    //   ))}
+    // </div>
+  );
 };
+
+
 
 export default LatestProducts;

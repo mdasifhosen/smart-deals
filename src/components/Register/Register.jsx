@@ -3,62 +3,74 @@ import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../../contexts/AuthContext";
 import { toast } from "react-toastify";
 
-
 const Register = () => {
-    const { signInWithGoogle, createUser, signOutUser, } =
-      use(AuthContext);
-    const navigate=useNavigate()
+  const {
+    signInWithGoogle,
+    emailVerification,
+    createUser,
+    signOutUser,
+    updateUser,
+  } = use(AuthContext);
+  const navigate = useNavigate();
 
-    const handleSignup = (e) => {
-        e.preventDefault()
-        // console.log('click me')
-        const name = e.target.name.value
-        const email = e.target.email.value
-        const photo = e.target.photo.value
-        const password = e.target.password.value
-        console.log({ name, email, photo, password });
+  const handleSignup = (e) => {
+    e.preventDefault();
+    // console.log('click me')
+    const name = e.target.name.value;
+    const email = e.target.email.value;
+    const photo = e.target.photo.value;
+    const password = e.target.password.value;
+    console.log({ name, email, photo, password });
 
-        createUser(email, password)
-            .then((result) => {
-                signOutUser()
-                
-                console.log('user', result.user)
-                toast.success("Registration successful!");
-                navigate("/login")
-                
-            })
-            .catch(error => {
-            toast.error(error.message);
+    createUser(email, password)
+      .then((result) => {
+        updateUser({
+          displayName: name,
+          photoURL: photo,
+        });
+        // console.log("user ",result.user)
+        emailVerification(result.user).then(() => {
+          toast.success("Verification email sent. Please check your inbox.");
+          return signOutUser();
+        });
+        // console.log('verificatin email')
+
+        console.log("user", result.user);
+        toast.success("Registration successful!");
+        navigate("/login");
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
+  };
+
+  const handleGoogleSignIn = () => {
+    signInWithGoogle()
+      .then((result) => {
+        console.log(result.user);
+        navigate("/");
+        const newUser = {
+          name: result.user.displayName,
+          email: result.user.email,
+          image: result.user.photoURL,
+        };
+        // create user in the database
+        fetch("http://localhost:3000/users", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(newUser),
         })
-    }
-
-    const handleGoogleSignIn = () => {
-        signInWithGoogle()
-            .then(result => {
-              console.log(result.user)
-              navigate("/")
-                const newUser = {
-                    name: result.user.displayName,
-                    email: result.user.email,
-                    image:result.user.photoURL
-                }
-                // create user in the database
-                fetch("http://localhost:3000/users", {
-                    method: "POST",
-                    headers: {
-                        'content-type':"application/json"
-                    },
-                    body:JSON.stringify(newUser)
-                })
-                    .then(res => res.json())
-                    .then(data => {
-                        console.log("data after user save",data)
-                    })
-            })
-            .catch(error => {
-            console.log(error)
-        })
-    }
+          .then((res) => res.json())
+          .then((data) => {
+            console.log("data after user save", data);
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   return (
     <div className="card bg-base-100 w-full mx-auto max-w-sm shrink-0 shadow-2xl">
       <h1 className="text-3xl text-center font-bold">Register now!</h1>
@@ -76,17 +88,37 @@ const Register = () => {
           <fieldset className="fieldset">
             {/* name */}
             <label className="label">Name</label>
-            <input type="text" name="name" className="input" placeholder="Your Name" />
+            <input
+              type="text"
+              name="name"
+              className="input"
+              placeholder="Your Name"
+            />
             {/* email */}
             <label className="label">Email</label>
-            <input type="email" name="email" className="input" placeholder="Email" />
+            <input
+              type="email"
+              name="email"
+              className="input"
+              placeholder="Email"
+            />
             {/* image */}
             <label className="label">Image-URL</label>
-            <input type="text" name="photo" className="input" placeholder="Image-URL" />
+            <input
+              type="text"
+              name="photo"
+              className="input"
+              placeholder="Image-URL"
+            />
 
             {/* password */}
             <label className="label">Password</label>
-            <input type="password" name="password" className="input" placeholder="Password" />
+            <input
+              type="password"
+              name="password"
+              className="input"
+              placeholder="Password"
+            />
             <button className="btn btn-neutral mt-4">Register</button>
           </fieldset>
         </form>

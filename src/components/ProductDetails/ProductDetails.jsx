@@ -9,8 +9,8 @@ const ProductDetails = () => {
     title,
     price_min,
     price_max,
-    _id:productId,
-    email,
+    _id: productId,
+    email: sellerEmail,
     image,
     location,
     condition,
@@ -19,8 +19,7 @@ const ProductDetails = () => {
     seller_contact,
     description,
     seller_name,
-      seller_image,
-    
+    seller_image,
   } = useLoaderData();
   const { user} = use(AuthContext);
     const bidModalRef = useRef(null);
@@ -47,13 +46,16 @@ const ProductDetails = () => {
       console.log(productId, name, email, bid)
       
       const newBid = {
-          product: productId,
-          buyer_name: name,
-          buyer_email: email,
-          buyer_image:user?.photoURL,
-          bid_price: bid,
-          status:"pending"
-      }
+        product: productId,
+        product_title: title,
+        product_image: image,
+        seller_name: seller_name,        
+        buyer_name: name,
+        buyer_email: email,
+        buyer_image: user?.photoURL,
+        bid_price: bid,
+        status: "pending",
+      };
 
       fetch("http://localhost:3000/bids", {
         method: "POST",
@@ -174,7 +176,7 @@ const ProductDetails = () => {
               <div>
                 <h3 className="font-bold text-lg">{seller_name}</h3>
 
-                <p className="text-sm text-gray-500">{email}</p>
+                <p className="text-sm text-gray-500">{sellerEmail}</p>
               </div>
             </div>
 

@@ -7,9 +7,6 @@ import { Link } from "react-router";
 const Product = ({ product }) => {
     const { _id, title, price_min, price_max, image } = product;
 
-
-    
-
     return (
       <div className="card bg-base-100 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-200">
         {/* Image */}
