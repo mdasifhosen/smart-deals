@@ -1,11 +1,13 @@
-import React, { use } from "react";
+import React, { use, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { AuthContext } from "../../contexts/AuthContext";
 import { toast } from "react-toastify";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
   const { signInWithGoogle,signOutUser, signInUser } = use(AuthContext);
   const navigate = useNavigate();
+  const[show,setShow]=useState(false)
   const location = useLocation()
   const from=location.state?.pathname||"/"
 
@@ -67,13 +69,24 @@ const Login = () => {
             />
 
             {/* password */}
-            <label className="label">Password</label>
-            <input
-              type="password"
-              name="password"
-              className="input"
-              placeholder="Password"
-            />
+             <div className="relative">
+                         <label className="label">Password</label>
+           
+                         <input
+                           type={show ? "text" : "password"}
+                           name="password"
+                           className="input w-full"
+                           placeholder="Password"
+                         />
+           
+                         <button
+                           type="button"
+                           onClick={() => setShow(!show)}
+                           className="absolute right-4 top-7"
+                         >
+                           {show ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                         </button>
+                       </div>
             <div>
               <a className="link link-hover">Forgot password?</a>
             </div>
